@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "mcp__plugin_wisdmlabs-engineering_context7__resolve-library-id",
+      "mcp__plugin_wisdmlabs-engineering_context7__query-docs",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(robocopy:*)",
+      "Bash(powershell -Command \"Copy-Item -Path ''temp-app\\\\*'' -Destination ''.'' -Recurse -Force; Remove-Item -Path ''temp-app'' -Recurse -Force\")",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm ls:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl:*)"
+    ]
+  }
+}
