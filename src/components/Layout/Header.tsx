@@ -82,7 +82,7 @@ export default function Header() {
             placeholder="filename"
             className="h-8 w-32 rounded-md border border-gray-300 bg-transparent px-2 text-sm text-gray-700 outline-none focus:border-blue-500 dark:border-gray-700 dark:text-gray-200 dark:focus:border-blue-400"
           />
-          <span className="text-xs text-gray-400">.doc</span>
+          <span className="text-xs text-gray-400">.docx</span>
           <button
             onClick={handleDownloadWord}
             disabled={state.sections.length === 0}

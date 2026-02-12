@@ -1,13 +1,33 @@
 "use client";
 
-import { createContext, useContext, useReducer, useCallback, ReactNode } from "react";
+import { createContext, useContext, useReducer, useCallback, useEffect, ReactNode } from "react";
 import React from "react";
 import { ReadmeState, ReadmeAction, SectionTemplate, ActiveSection } from "@/types";
+
+const STORAGE_KEY = "readme-editor-state";
 
 const initialState: ReadmeState = {
   sections: [],
   selectedSectionId: null,
 };
+
+function loadState(): ReadmeState {
+  if (typeof window === "undefined") return initialState;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved) as ReadmeState;
+      if (Array.isArray(parsed.sections)) return parsed;
+    }
+  } catch {}
+  return initialState;
+}
+
+function saveState(state: ReadmeState) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {}
+}
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 11);
@@ -73,7 +93,11 @@ interface ReadmeContextValue {
 const ReadmeContext = createContext<ReadmeContextValue | null>(null);
 
 export function ReadmeProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(readmeReducer, initialState);
+  const [state, dispatch] = useReducer(readmeReducer, initialState, loadState);
+
+  useEffect(() => {
+    saveState(state);
+  }, [state]);
 
   const addSection = useCallback(
     (template: SectionTemplate) => dispatch({ type: "ADD_SECTION", payload: template }),
