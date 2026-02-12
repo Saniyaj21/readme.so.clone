@@ -4,17 +4,24 @@ import { useState } from "react";
 import { useReadmeStore } from "@/store/useReadmeStore";
 import { useTheme } from "@/store/useThemeStore";
 import { generateMarkdown } from "@/utils/generateMarkdown";
+import { downloadWord } from "@/utils/downloadWord";
 
 export default function Header() {
   const { state, reset } = useReadmeStore();
   const { theme, toggleTheme } = useTheme();
   const [copied, setCopied] = useState(false);
+  const [filename, setFilename] = useState("readme");
 
   const handleCopy = async () => {
     const md = generateMarkdown(state.sections);
     await navigator.clipboard.writeText(md);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownloadWord = async () => {
+    const md = generateMarkdown(state.sections);
+    await downloadWord(md, filename);
   };
 
   return (
@@ -65,6 +72,25 @@ export default function Header() {
         >
           {copied ? "Copied!" : "Copy Markdown"}
         </button>
+
+        {/* Filename input + Download Word */}
+        <div className="flex items-center gap-1.5">
+          <input
+            type="text"
+            value={filename}
+            onChange={(e) => setFilename(e.target.value)}
+            placeholder="filename"
+            className="h-8 w-32 rounded-md border border-gray-300 bg-transparent px-2 text-sm text-gray-700 outline-none focus:border-blue-500 dark:border-gray-700 dark:text-gray-200 dark:focus:border-blue-400"
+          />
+          <span className="text-xs text-gray-400">.doc</span>
+          <button
+            onClick={handleDownloadWord}
+            disabled={state.sections.length === 0}
+            className="rounded-md bg-green-600 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-green-500 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Download Word
+          </button>
+        </div>
       </div>
     </header>
   );
